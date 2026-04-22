@@ -1,0 +1,29 @@
+<launch>
+    <arg name="csv_file" default="/home/chd/catkin_ws/scripts/vehicle_data_odom.csv"/>
+
+    <node pkg="320scripts" type="gnss_localizer_node.py" name="gnss_localizer_node" output="screen" />
+
+    <node pkg="320scripts" type="planning_node.py" name="enu_mpc_planning_node" output="screen">
+        <param name="csv_path" value="$(arg csv_file)"/>
+        <param name="target_speed" value="10.0"/>
+        <param name="rate" value="20"/>
+    </node>
+
+    <node pkg="320scripts" type="safe_mpc_runner.py" name="safe_mpc_runner" output="screen">
+        <param name="rate" value="20" />
+
+        <param name="max_steer_limit" value="0.698" />
+
+        <param name="max_acc_limit" value="2.0" />
+        <param name="max_decel_limit" value="3.0" />
+        <param name="brake_deadzone" value="10.0" />
+
+        <param name="goal_dist_threshold" value="1.5" />
+        <param name="status_log_interval" value="1.0" />
+        <param name="wait_log_interval" value="5.0" />
+        <param name="stop_log_interval" value="0.5" />
+        <param name="enable_file_log" value="true" />
+        <param name="log_dir" value="/home/chd/catkin_ws/320scripts/planner/logs" />
+        <param name="control_file_log_interval" value="0.2" />
+    </node>
+</launch>
